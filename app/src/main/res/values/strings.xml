@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand -->
+    <string name="app_name">Magic Eight Ball</string>
+
+    <!-- UI -->
+    <string name="hint_question">Ask your question…</string>
+    <string name="btn_ask">Ask</string>
+    <string name="hint_ask">Shake or ask a question</string>
+    <string name="hint_no_shake">Tap the ball or type your question below</string>
+    <string name="eight_ball_label">Magic Eight Ball</string>
+    <string name="eight_numeral">8</string>
+</resources>

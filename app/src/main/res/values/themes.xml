@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MagicEightBall" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/ball_inner_bg</item>
+        <item name="colorPrimaryVariant">@color/ball_outer</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/response_positive</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+</resources>
