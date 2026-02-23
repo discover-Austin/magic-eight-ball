@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App background -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Eight ball colours -->
+    <color name="ball_outer">#FF1A1A1A</color>
+    <color name="ball_inner_bg">#FF0D0D5E</color>
+    <color name="ball_number">#FFFFFFFF</color>
+
+    <!-- Response sentiment colours -->
+    <color name="response_positive">#FF4CAF50</color>
+    <color name="response_neutral">#FFFFC107</color>
+    <color name="response_negative">#FFFF5252</color>
+
+    <!-- Input area -->
+    <color name="input_background">#FF1E1E1E</color>
+    <color name="input_hint">#FF888888</color>
+</resources>
