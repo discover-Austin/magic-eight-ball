@@ -7,7 +7,14 @@
     <string name="hint_question">Ask your question…</string>
     <string name="btn_ask">Ask</string>
     <string name="hint_ask">Shake or ask a question</string>
+    <string name="hint_shake">Shake or tap the ball, or type your question below</string>
     <string name="hint_no_shake">Tap the ball or type your question below</string>
     <string name="eight_ball_label">Magic Eight Ball</string>
     <string name="eight_numeral">8</string>
+
+    <!-- History -->
+    <string name="history_label">History</string>
+    <string name="clear_history">Clear history</string>
+    <string name="share_response">Share response</string>
+    <string name="share_via">Share via</string>
 </resources>

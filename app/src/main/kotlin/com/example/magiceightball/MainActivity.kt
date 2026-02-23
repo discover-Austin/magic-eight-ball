@@ -2,13 +2,17 @@ package com.example.magiceightball
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
+import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.magiceightball.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var eightBall: EightBall
     private lateinit var shakeDetector: ShakeDetector
+    private lateinit var historyAdapter: HistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,22 +29,40 @@ class MainActivity : AppCompatActivity() {
 
         eightBall = EightBall()
 
+        setupSensor()
+        setupInput()
+        setupHistory()
+
+        // Show hint text on launch
+        binding.answerText.text = getString(R.string.hint_ask)
+        binding.answerText.alpha = 0.6f
+    }
+
+    private fun setupSensor() {
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         shakeDetector = ShakeDetector(sensorManager) {
-            runOnUiThread { revealAnswer(eightBall.shake()) }
+            runOnUiThread {
+                val response = eightBall.shake()
+                revealAnswer(response)
+                addHistoryEntry("", response)
+            }
         }
 
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) {
+            binding.shakeHint.text = getString(R.string.hint_no_shake)
+        }
+    }
+
+    private fun setupInput() {
         binding.askButton.setOnClickListener {
             dismissKeyboard()
-            val question = binding.questionInput.text?.toString().orEmpty().trim()
-            revealAnswer(eightBall.ask(question))
+            askQuestion()
         }
 
         binding.questionInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 dismissKeyboard()
-                val question = binding.questionInput.text?.toString().orEmpty().trim()
-                revealAnswer(eightBall.ask(question))
+                askQuestion()
                 true
             } else {
                 false
@@ -47,18 +70,48 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.ballContainer.setOnClickListener {
-            val question = binding.questionInput.text?.toString().orEmpty().trim()
-            revealAnswer(eightBall.ask(question))
+            askQuestion()
+        }
+    }
+
+    private fun setupHistory() {
+        historyAdapter = HistoryAdapter { entry -> shareResponse(entry) }
+        binding.historyList.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = historyAdapter
         }
 
-        // Show hint text on launch
-        binding.answerText.text = getString(R.string.hint_ask)
-        binding.answerText.alpha = 0.6f
-
-        // Hide shake hint when no accelerometer is present
-        if (sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER) == null) {
-            binding.shakeHint.text = getString(R.string.hint_no_shake)
+        binding.clearHistoryButton.setOnClickListener {
+            historyAdapter.clear()
+            binding.clearHistoryButton.visibility = View.GONE
         }
+    }
+
+    private fun askQuestion() {
+        val question = binding.questionInput.text?.toString().orEmpty().trim()
+        val response = eightBall.ask(question)
+        revealAnswer(response)
+        addHistoryEntry(question, response)
+        binding.questionInput.text?.clear()
+    }
+
+    private fun addHistoryEntry(question: String, response: EightBall.Response) {
+        historyAdapter.addEntry(HistoryEntry(question, response))
+        binding.historyList.scrollToPosition(0)
+        binding.clearHistoryButton.visibility = View.VISIBLE
+    }
+
+    private fun shareResponse(entry: HistoryEntry) {
+        val shareText = if (entry.question.isNotBlank()) {
+            "I asked the Magic 8-Ball: \"${entry.question}\"\nAnswer: ${entry.response.text}"
+        } else {
+            "I shook the Magic 8-Ball and got: ${entry.response.text}"
+        }
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+        startActivity(Intent.createChooser(intent, getString(R.string.share_via)))
     }
 
     override fun onResume() {
@@ -73,6 +126,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun revealAnswer(response: EightBall.Response) {
         val answerText = binding.answerText
+
+        // Haptic feedback on answer reveal
+        binding.ballContainer.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 
         // Colour-code by sentiment
         val colorRes = when (response.sentiment) {
