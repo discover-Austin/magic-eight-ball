@@ -13,25 +13,26 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:letterSpacing="0.05"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Eight Ball -->
+    <!-- Eight Ball (slightly smaller to fit history below) -->
     <FrameLayout
         android:id="@+id/ballContainer"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/bg_ball_outer"
         android:clickable="true"
         android:focusable="true"
+        android:contentDescription="@string/eight_ball_label"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,8 +40,8 @@
 
         <!-- Inner blue window -->
         <FrameLayout
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_gravity="center"
             android:background="@drawable/bg_ball_inner">
 
@@ -61,14 +62,14 @@
 
         <!-- "8" numeral at top of ball -->
         <TextView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="@string/eight_numeral"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
     </FrameLayout>
@@ -78,10 +79,10 @@
         android:id="@+id/shakeHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Shake or tap the ball, or type your question below"
+        android:layout_marginTop="12dp"
+        android:text="@string/hint_shake"
         android:textColor="@color/input_hint"
-        android:textSize="13sp"
+        android:textSize="12sp"
         android:gravity="center"
         android:paddingHorizontal="32dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,22 +95,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/bg_input"
         android:hint="@string/hint_question"
         android:textColorHint="@color/input_hint"
         android:textColor="@color/white"
-        android:padding="14dp"
+        android:padding="12dp"
         android:inputType="textCapSentences"
         android:imeOptions="actionDone"
         android:singleLine="true"
         android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/askButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shakeHint"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toBottomOf="@id/shakeHint" />
 
     <!-- Ask button -->
     <com.google.android.material.button.MaterialButton
@@ -124,5 +123,63 @@
         app:layout_constraintBaseline_toBaselineOf="@id/questionInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/questionInput" />
+
+    <!-- History section header -->
+    <TextView
+        android:id="@+id/historyLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="0dp"
+        android:text="@string/history_label"
+        android:textColor="@color/input_hint"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"
+        android:textAllCaps="true"
+        app:layout_constraintTop_toBottomOf="@id/questionInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/clearHistoryButton" />
+
+    <!-- Clear history button -->
+    <ImageButton
+        android:id="@+id/clearHistoryButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_clear_all"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/clear_history"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/historyLabel"
+        app:layout_constraintBottom_toBottomOf="@id/historyLabel" />
+
+    <!-- Divider line -->
+    <View
+        android:id="@+id/historyDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/history_divider"
+        app:layout_constraintTop_toBottomOf="@id/historyLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- History list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/historyDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_history" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

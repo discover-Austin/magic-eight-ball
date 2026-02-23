@@ -17,4 +17,7 @@
     <!-- Input area -->
     <color name="input_background">#FF1E1E1E</color>
     <color name="input_hint">#FF888888</color>
+
+    <!-- History -->
+    <color name="history_divider">#FF2A2A2A</color>
 </resources>
