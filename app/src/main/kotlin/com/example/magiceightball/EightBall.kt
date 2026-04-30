@@ -1,15 +1,12 @@
 package com.example.magiceightball
 
 /**
- * Core Magic Eight Ball logic with intelligent, context-aware responses.
+ * Core Magic Eight Ball logic.
  *
- * The ball analyses the user's question for keywords and adjusts the probability
- * weighting of positive, neutral, and negative response pools so the answer feels
- * relevant to the nature of the question asked.
- *
- * Uses group-normalized weighting: each sentiment group gets an equal base weight,
- * then keyword hits boost the matching group. This ensures keywords have proportional
- * impact regardless of the unequal response counts per group (10/5/5).
+ * [ask] weights responses by sentiment based on keywords in the question.
+ * Each sentiment group gets an equal base weight of 1.0; keyword hits add
+ * [KEYWORD_BOOST] per hit to the matching group, normalizing for the unequal
+ * response counts per group (10 positive / 5 neutral / 5 negative).
  */
 class EightBall {
 
@@ -131,12 +128,7 @@ class EightBall {
     private val random = kotlin.random.Random
 
     /**
-     * Returns a response intelligently weighted based on [question] keywords.
-     *
-     * Uses group-normalized weighting: each sentiment group (positive, neutral,
-     * negative) gets an equal base weight of 1.0, then keyword hits boost the
-     * matching group's weight by [KEYWORD_BOOST] per hit. This ensures keywords
-     * have proportional impact regardless of response counts per group (10/5/5).
+     * Returns a response weighted by [question] keywords.
      *
      * If [question] is blank, all three groups have equal weight (uniform 1/3 each).
      */
