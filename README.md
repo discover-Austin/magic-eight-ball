@@ -44,7 +44,7 @@ app/src/main/
 | `fail`, `bad`, `wrong`, `lose`, … | Boosts **negative** responses |
 | `maybe`, `perhaps`, `possibly`, … | Boosts **neutral** responses |
 
-Each matching keyword adds 2 extra copies of every response in that sentiment group to the selection pool, so the answer still surprises you while feeling contextually relevant.
+Each keyword hit adds weight to the matching sentiment group. All three groups start with equal base weight, so the bias is proportional regardless of the response count per group.
 
 ## Requirements
 

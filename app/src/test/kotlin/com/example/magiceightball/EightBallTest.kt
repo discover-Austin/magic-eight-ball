@@ -98,9 +98,6 @@ class EightBallTest {
 
     @Test
     fun `negative keywords are as effective as positive keywords`() {
-        // The old per-response pool algorithm gave positive keywords ~75% hit rate
-        // but negative only ~50% because there are 10 positive vs 5 negative responses.
-        // The group-normalized algorithm should give both about the same rate.
         val posResults = (1..500).map { eightBall.ask("love happy good").sentiment }
         val negResults = (1..500).map { eightBall.ask("fail bad wrong").sentiment }
 
@@ -134,7 +131,6 @@ class EightBallTest {
 
     @Test
     fun `morphological variants are recognised as keywords`() {
-        // "successful" should now trigger positive bias (was not matched before)
         val results = (1..200).map { eightBall.ask("Will I be successful?").sentiment }
         val positiveCount = results.count { it == EightBall.Sentiment.POSITIVE }
         assertTrue(
